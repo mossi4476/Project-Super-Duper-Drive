@@ -63,6 +63,15 @@ public class HomeController {
         Integer userId = user.getUserId();
         String[] fileListings = fileService.getFileListings(userId);
         MultipartFile multipartFile = newFile.getFile();
+
+        // Check if no file is uploaded
+        if (multipartFile.isEmpty()) {
+            model.addAttribute("result", "error");
+            model.addAttribute("message", "No file selected for upload.");
+            model.addAttribute("files", fileService.getFileListings(userId));
+            return "result";
+        }
+
         String fileName = multipartFile.getOriginalFilename();
         boolean fileIsDuplicate = false;
         for (String fileListing: fileListings) {
